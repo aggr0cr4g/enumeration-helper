@@ -1,2 +1,4 @@
 # enumeration-helper
-Just trying to help myself out. That is all
+Just trying to help myself save some time.
+
+Slow work in progress. 
