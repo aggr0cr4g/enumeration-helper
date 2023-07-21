@@ -303,6 +303,11 @@ def run_historical_enumeration(args):
             historical_enum_thread.join()  # Wait for the thread to finish        
         '''
 
+def validate_url(url):
+    pattern = r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
+    if not re.match(pattern, url):
+        raise argparse.ArgumentTypeError(f"{url} is not a valid subdomain format")
+    return url
 
 if __name__ == "__main__":
     # Argument parsing
@@ -314,12 +319,12 @@ if __name__ == "__main__":
 
     # WAF Detection command
     parser_waf = subparsers.add_parser("waf", help="WAF Detection")
-    parser_waf.add_argument("--url", required=True, help="Target URL")
+    parser_waf.add_argument("--url", required=True, help="Target URL in sub.domain.tld format",type=validate_url)
 
     # Historical Enumeration command
     parser_hist = subparsers.add_parser("hist", help="Historical Enumeration")
     group = parser_hist.add_mutually_exclusive_group(required=True)
-    group.add_argument("--url", help="Target URL")
+    group.add_argument("--url", help="Target URL in sub.domain.tld format", type=validate_url)
     group.add_argument("--file", help="File containing a list of URLs one per line")
 
     # Parse the arguments
@@ -337,3 +342,4 @@ if __name__ == "__main__":
         #hist_enum.start()
     else:
         print("Please specify a valid command. Use -h for help.")
+    
